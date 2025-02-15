@@ -64,7 +64,7 @@ class MainRunner:
                 action_to_run = self.get_next_action()
 
                 if first:
-                    action_to_run.on_start()
+                    action_to_run.on_start(connection)
 
                 action_to_run.run(connection)
 

@@ -11,6 +11,6 @@ def get_connection(device: str) -> utility.mavserial | utility.mavudp:
     Raises UnsupportedDeviceConnection if connects otherwise.
     """
     connection = utility.mavlink_connection(device=device)
-    if type(connection) == utility.mavserial or type(connection) == utility.mavudp:
-        raise UnsupportedDeviceConnection
+    if type(connection) == type(utility.mavserial) or type(connection) == type(utility.mavudp):
+        raise UnsupportedDeviceConnection(f"Unsupported type: {type(connection)}")
     return connection

@@ -1,0 +1,23 @@
+Metadata-Version: 2.2
+Name: 7_inch_MAVLink_Mission
+Version: 0.1.0
+Summary: MAVLink mission for a 7-inch quad.
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: pymavlink
+
+# 7-Inch Quad MAVLik Mission
+
+## Setup
+1. Clone the repo:
+    ```
+    git clone https://github.com/uci-uav-forge/uavf_2025.git
+    cd 7_Inch_MAVLink_Mission
+    ```
+
+2. Now that you are in the project, create the virtual environment:
+   ```
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -e .
+   ```
