@@ -2,11 +2,16 @@ import mavlink_helper.protocols as protocols
 import threading
 
 class MainRunner:
-    def __init__(self, device: str):
+    def __init__(self, device: str, debug: bool = False):
         self.action_list: list[protocols.Protocol] = []
         self.device = device
+        self.debug = debug
         self.thread = None
         self.kill_thread = False
+
+    def log(self, message: str):
+        if self.debug:
+            print(message)
 
     def add_action(self, action: protocols.Protocol, index: int | None = None) -> None:
         if index is None:
@@ -56,6 +61,7 @@ class MainRunner:
     def _main_loop(self):
         connection = protocols.get_connection(self.device)  # Get connection
         protocols.wait_for_heartbeat(connection)  # Wait for heartbeat
+        self.log("\nHeartbeat received and connection established.\n")
         first = True
         while not self.kill_thread:
             protocols.check_and_send_heartbeat(connection)

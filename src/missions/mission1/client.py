@@ -2,7 +2,7 @@ from mavlink_helper.runners import MainRunner
 from mavlink_helper.protocols import ArmProtocol, TakeoffProtocol, ChangeModeProtocol, WaitProtocol, ModeType
 import time
 
-runner = MainRunner("udp:127.0.0.1:14550")
+runner = MainRunner("10.0.0.100:14550")
 
 # Build the mission
 runner.add_action(ChangeModeProtocol(ModeType.GUIDED, debug=True))
