@@ -1,9 +1,12 @@
 import mavlink_helper.protocols as protocols
+import threading
 
 class MainRunner:
     def __init__(self, device: str):
         self.action_list: list[protocols.Protocol] = []
         self.device = device
+        self.thread = None
+        self.kill_thread = False
 
     def add_action(self, action: protocols.Protocol, index: int | None = None) -> None:
         if index is None:
@@ -34,23 +37,39 @@ class MainRunner:
     def set_action_list(self, new_list: list) -> None:
         self.action_list = new_list
 
-    def start_spinning(self):
-        """Starts up a thread running the main action execution loop."""
-        pass  # TODO threading
-
     def finished_actions(self) -> bool:
         return len(self.action_list) == 0
+
+    def start_spinning(self) -> threading.Thread:
+        """Starts up a thread running the main action execution loop."""
+        if self.thread is None:
+            self.kill_thread = False
+            thread = threading.Thread(target=self._main_loop)
+            thread.start()
+            return thread
+        else:
+            raise threading.ThreadError("Thread already running!")
+        
+    def stop_spinning(self):
+        self.kill_thread = True
 
     def _main_loop(self):
         connection = protocols.get_connection(self.device)  # Get connection
         protocols.wait_for_heartbeat(connection)  # Wait for heartbeat
-
-        while True:
+        first = True
+        while not self.kill_thread:
             protocols.check_and_send_heartbeat(connection)
 
             if not self.finished_actions():
                 action_to_run = self.get_next_action()
+
+                if first:
+                    action_to_run.on_start()
+
                 action_to_run.run(connection)
 
                 if action_to_run.finished():
                     self.pop_action(0)
+                    first = True
+                else:
+                    first = False
