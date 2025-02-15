@@ -1,4 +1,4 @@
-# 8-Inch Quad MAVLik Mission
+# 7-Inch Quad MAVLik Mission
 
 ## Setup
 1. Clone the repo:
