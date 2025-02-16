@@ -26,11 +26,16 @@ class ChangeModeProtocol(Protocol):
         """Changes the vehicles mode. Use ModeType enum for mode value."""
         super().__init__(debug)
         self.mode = mode
+        self.complete = False
+        self.confirmation = 0
+
+    def on_start(self, connection):
+        self.complete = False
 
     def run(self, connection: utility.mavserial | utility.mavudp) -> None:
         message = dialect.MAVLink_command_long_message(target_system=connection.target_system,
                                                 target_component=connection.target_component,
-                                                confirmation=0,
+                                                confirmation=self.confirmation,
                                                 command=176,  # MAV_CMD_DO_SET_MODE
                                                 param1=1.0,  # Enable custom mode flag
                                                 param2=float(self.mode),  # Flightmode number or value
@@ -41,10 +46,17 @@ class ChangeModeProtocol(Protocol):
                                                 param7=0.0)
         
         self.log("Setting mode...")
-
         connection.mav.send(message)  # Send the mavlink message to the vehicle
         self.log("Set mode message sent. Waiting for ack...")
 
         # Verify the message was sent with ack
-        ack = connection.recv_match(type=dialect.MAVLink_command_ack_message.msgname, blocking=True)
-        self.log(f"Set mode ack recieved: {ack}")
+        ack = connection.recv_match(type=dialect.MAVLink_command_ack_message.msgname, blocking=True, timeout=0.5)
+        if ack is not None:
+            self.log(f"Set mode ack recieved: {ack}")
+            self.complete = True
+        else:
+            self.log("Set mode ack not received, trying again...")
+            self.confirmation += 1
+
+    def finished(self):
+        return self.complete
