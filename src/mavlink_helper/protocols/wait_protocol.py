@@ -14,6 +14,7 @@ class WaitProtocol(Protocol):
     def on_start(self, connection: utility.mavserial | utility.mavudp) -> None:
         self.start_clock = time.time()
         self.done = False
+        self.log(f"Waiting for {self.wait_time} seconds...")
 
     def run(self, connection: utility.mavserial | utility.mavudp) -> None:
         if time.time() - self.start_clock >= self.wait_time:

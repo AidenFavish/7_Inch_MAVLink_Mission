@@ -5,9 +5,9 @@ from mavlink_helper.protocols import Protocol
 
 class ParameterProtocol(Protocol):
     def __init__(self, param_name: str, param_value: float, debug: bool = False):
-        """Defines a the protocol to change a parameter."""
+        """Defines a protocol to change a parameter."""
         super().__init__(debug)
-        self.param_id = param_name
+        self.param_id = param_name.encode(encoding='utf-8')
         self.value = float(param_value)
         self.verified = False
 
