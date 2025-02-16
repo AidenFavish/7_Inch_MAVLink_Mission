@@ -8,10 +8,12 @@ class PolygonGeofenceProtocol(Protocol):
         """Defines a geofence polygon in lat, lon points and altitude in local meters."""
         super().__init__(debug)
         self.geofence = geofence_points
+        self.max_altitude = max_altitude
 
         # Bitmask that enables max altitude and inclusion/exclusion polygons
         self.param_set_fence_type = ParameterProtocol("FENCE_TYPE", 1 + 4, debug=True)
 
+        self.param_set_max_alt = ParameterProtocol("FENCE_ALT_MAX", self.max_altitude, debug=True)
         self.param_set_fence_action = ParameterProtocol("FENCE_ACTION", 1, debug=True)  # RTL or Land
         self.param_set_fence_enable = ParameterProtocol("FENCE_ENABLE", 1, debug=True)
 
@@ -62,6 +64,7 @@ class PolygonGeofenceProtocol(Protocol):
         self.log("Completed polygon geofence transfer.")
 
         self.param_set_fence_type.run_to_completion(connection)
+        self.param_set_max_alt.run_to_completion(connection)
         self.param_set_fence_action.run_to_completion(connection)
         self.param_set_fence_enable.run_to_completion(connection)
 
