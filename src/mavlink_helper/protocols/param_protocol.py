@@ -8,7 +8,7 @@ class ParameterProtocol(Protocol):
         """Defines a the protocol to change a parameter."""
         super().__init__(debug)
         self.param_id = param_name
-        self.value = param_value
+        self.value = float(param_value)
         self.verified = False
 
     def on_start(self, connection):
@@ -36,3 +36,8 @@ class ParameterProtocol(Protocol):
 
     def finished(self):
         return self.verified
+    
+    def run_to_completion(self, connection):
+        self.on_start(connection)
+        while not self.finished():
+            self.run(connection)

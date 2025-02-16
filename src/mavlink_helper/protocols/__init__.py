@@ -5,3 +5,6 @@ from .arm_protocol import ArmProtocol
 from .change_mode_protocol import ChangeModeProtocol, ModeType
 from .takeoff_protocol import TakeoffProtocol
 from .wait_protocol import WaitProtocol
+from .param_protocol import ParameterProtocol
+from .cylindrical_geofence_protocol import CylindricalGeofenceProtocol
+from .polygon_geofence_protocol import PolygonGeofenceProtocol
