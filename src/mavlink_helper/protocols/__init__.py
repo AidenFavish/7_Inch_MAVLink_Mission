@@ -8,3 +8,4 @@ from .wait_protocol import WaitProtocol
 from .param_protocol import ParameterProtocol
 from .cylindrical_geofence_protocol import CylindricalGeofenceProtocol
 from .polygon_geofence_protocol import PolygonGeofenceProtocol
+from .waypoints_mission_protocol import WaypointMissionProtocol
