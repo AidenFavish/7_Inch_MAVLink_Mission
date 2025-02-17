@@ -15,7 +15,7 @@ waypoints = [
 runner = MainRunner("udp:127.0.0.1:14550")
 
 # Build the mission
-runner.add_action(CylindricalGeofenceProtocol(100.0, 50.0, True))
+runner.add_action(CylindricalGeofenceProtocol(100.0, 75.0, True))
 runner.add_action(WaypointMissionProtocol(waypoints, debug=True))
 runner.add_action(WaitProtocol(10.0, debug=True))
 runner.add_action(ChangeModeProtocol(ModeType.GUIDED, debug=True))

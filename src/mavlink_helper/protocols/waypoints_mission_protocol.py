@@ -44,7 +44,7 @@ class WaypointMissionProtocol(Protocol):
                                                         command=dialect.MAV_CMD_NAV_WAYPOINT,
                                                         current=0,
                                                         autocontinue=1,
-                                                        param1=len(self.waypoints),
+                                                        param1=0.0,
                                                         param2=0.0,
                                                         param3=0.0,
                                                         param4=0.0,
