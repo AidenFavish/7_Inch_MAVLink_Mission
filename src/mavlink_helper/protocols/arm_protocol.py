@@ -4,16 +4,20 @@ import pymavlink.dialects.v20.all as dialect
 from mavlink_helper.protocols import Protocol
 
 class ArmProtocol(Protocol):
-    def __init__(self, debug: bool = False):
-        """Defines a takeoff command with takeoff altitude in meters."""
+    def __init__(self, arm: bool = True, debug: bool = False):
+        """Defines a command to arm the drone."""
         super().__init__(debug)
+        if arm:
+            self.arm = 1.0
+        else:
+            self.arm = 0.0
 
     def run(self, connection: utility.mavserial | utility.mavudp) -> None:
         message = dialect.MAVLink_command_long_message(target_system=connection.target_system,
                                                 target_component=connection.target_component,
                                                 confirmation=0,
                                                 command=400,  # MAV_CMD_COMPONENT_ARM_DISARM
-                                                param1=1.0,  # Arm = 1, Disarm = 0
+                                                param1=self.arm,  # Arm = 1, Disarm = 0
                                                 param2=0.0,
                                                 param3=0.0,
                                                 param4=0.0,
