@@ -4,6 +4,7 @@ import pymavlink.mavutil as utility
 import pymavlink.dialects.v20.all as dialect
 
 class StreamType:
+    LOCAL_POSITION_NED = 32
     GLOBAL_POSITION = 33
     BATTERY_STATUS = 147
 

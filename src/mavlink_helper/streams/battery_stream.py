@@ -12,7 +12,7 @@ class BatteryStream(Stream):
         self.log("Checking for new battery status...")
         msg = connection.recv_match(type=dialect.MAVLink_battery_status_message.msgname)
         if msg is not None:
-            self.log(f"New battery status found: {msg}")
+            self.log(f"New battery status received: {msg}")
             self.latest_msg = msg
             self.reset_time()
 
