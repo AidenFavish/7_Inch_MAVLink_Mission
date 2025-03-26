@@ -13,3 +13,6 @@
     source venv/bin/activate
     pip install -e .
    ```
+
+## Notes
+    If you are having connection issues try first oppening qgroundcontrol, closing it, then rerun our program
