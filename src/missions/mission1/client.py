@@ -1,5 +1,5 @@
 from mavlink_helper.runners import MainRunner
-from mavlink_helper.protocols import ArmProtocol, TakeoffProtocol, ChangeModeProtocol, WaitProtocol, ModeType, CylindricalGeofenceProtocol, WaypointMissionProtocol
+from mavlink_helper.protocols import ArmProtocol, TakeoffProtocol, ChangeModeProtocol, WaitProtocol, ModeType, PolygonGeofenceProtocol, WaypointMissionProtocol
 import time
 
 waypoints = [
@@ -7,12 +7,13 @@ waypoints = [
     (33.64248837381376, -117.82646754294689, 50.0),
     (33.64258391268535, -117.82640341235583, 50.0),
     (33.64250523362199, -117.8262312723489, 50.0),
+    (33.642406884691866, -117.82628696470394, 50.0),
 ]
 
 runner = MainRunner("udp:127.0.0.1:14550")
 
 # Build the mission
-runner.add_action(CylindricalGeofenceProtocol(100.0, 75.0, True))
+runner.add_action(PolygonGeofenceProtocol(waypoints))
 runner.add_action(WaypointMissionProtocol(waypoints, debug=True))
 runner.add_action(WaitProtocol(10.0, debug=True))
 runner.add_action(ChangeModeProtocol(ModeType.GUIDED, debug=True))
