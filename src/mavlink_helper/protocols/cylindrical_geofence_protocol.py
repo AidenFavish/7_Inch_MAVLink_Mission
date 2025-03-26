@@ -16,12 +16,12 @@ class CylindricalGeofenceProtocol(Protocol):
         self.max_altitude = max_altitude
 
         # Bitmask that enables max altitude and circle centered on home fence
-        self.param_set_fence_type = ParameterProtocol("FENCE_TYPE", 1 + 2, debug=True)
+        self.param_set_fence_type = ParameterProtocol("FENCE_TYPE", 1 + 2, debug=debug)
 
-        self.param_set_radius = ParameterProtocol("FENCE_RADIUS", self.radius, debug=True)
-        self.param_set_max_alt = ParameterProtocol("FENCE_ALT_MAX", self.max_altitude, debug=True)
-        self.param_set_fence_action = ParameterProtocol("FENCE_ACTION", 1, debug=True)  # RTL or Land
-        self.param_set_fence_enable = ParameterProtocol("FENCE_ENABLE", 1, debug=True)
+        self.param_set_radius = ParameterProtocol("FENCE_RADIUS", self.radius, debug=debug)
+        self.param_set_max_alt = ParameterProtocol("FENCE_ALT_MAX", self.max_altitude, debug=debug)
+        self.param_set_fence_action = ParameterProtocol("FENCE_ACTION", 1, debug=debug)  # RTL or Land
+        self.param_set_fence_enable = ParameterProtocol("FENCE_ENABLE", 1, debug=debug)
 
     def run(self, connection: utility.mavserial | utility.mavudp) -> None:
         self.log("Setting cylindrical geofence around home position...")
