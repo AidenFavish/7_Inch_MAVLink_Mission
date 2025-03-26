@@ -70,7 +70,7 @@ class MainRunner:
             if s.prev_time is None:
                 s.interval_request(connection)
             if s.is_ready():
-                s.update()
+                s.update(connection)
 
     def _main_loop(self):
         connection = protocols.get_connection(self.device)  # Get connection
