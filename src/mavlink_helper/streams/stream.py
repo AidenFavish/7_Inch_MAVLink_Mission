@@ -7,6 +7,7 @@ class StreamType:
     LOCAL_POSITION_NED = 32
     GLOBAL_POSITION = 33
     BATTERY_STATUS = 147
+    FENCE_STATUS = 162
 
 class Stream:
     def __init__(self, debug: bool, msg_id: int, time_interval):
