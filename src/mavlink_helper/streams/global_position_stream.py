@@ -20,14 +20,6 @@ class GlobalPositionStream(Stream):
         """Get global position at time interval in microseconds."""
         super().__init__(debug, StreamType.GLOBAL_POSITION, time_interval)
         self.latest_msg = None
-    
-    def update(self, connection: utility.mavserial | utility.mavudp) -> None:
-        self.log("Checking for new global position...")
-        msg = connection.recv_match(type=dialect.MAVLink_global_position_int_message.msgname)
-        if msg is not None:
-            self.log(f"New global position received: {msg}")
-            self.latest_msg = msg
-            self.reset_time()
 
     def get_position(self) -> GlobalPosition:
         return GlobalPosition(timestamp=self.latest_msg.time_boot_ms, 

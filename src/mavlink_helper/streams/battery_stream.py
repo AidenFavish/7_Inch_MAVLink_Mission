@@ -7,14 +7,6 @@ class BatteryStream(Stream):
         """Get battery status at time interval in microseconds."""
         super().__init__(debug, StreamType.BATTERY_STATUS, time_interval)
         self.latest_msg = None
-    
-    def update(self, connection: utility.mavserial | utility.mavudp) -> None:
-        self.log("Checking for new battery status...")
-        msg = connection.recv_match(type=dialect.MAVLink_battery_status_message.msgname)
-        if msg is not None:
-            self.log(f"New battery status received: {msg}")
-            self.latest_msg = msg
-            self.reset_time()
 
     def get_batt_remaining(self) -> int:
         """Percent of battery remaining."""

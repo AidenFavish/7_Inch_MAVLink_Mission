@@ -19,14 +19,6 @@ class LocalPositionStream(Stream):
         """Get NED local position at time interval in microseconds."""
         super().__init__(debug, StreamType.LOCAL_POSITION_NED, time_interval)
         self.latest_msg = None
-    
-    def update(self, connection: utility.mavserial | utility.mavudp) -> None:
-        self.log("Checking for new local position...")
-        msg = connection.recv_match(type=dialect.MAVLink_local_position_ned_message.msgname)
-        if msg is not None:
-            self.log(f"New local position received: {msg}")
-            self.latest_msg = msg
-            self.reset_time()
 
     def get_position(self) -> LocalPosition:
         return LocalPosition(timestamp=self.latest_msg.time_boot_ms,
