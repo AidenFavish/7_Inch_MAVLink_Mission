@@ -1,9 +1,11 @@
 import mavlink_helper.protocols as protocols
+import mavlink_helper.streams as streams
 import threading
 
 class MainRunner:
     def __init__(self, device: str, debug: bool = False):
         self.action_list: list[protocols.Protocol] = []
+        self.stream_list: list[streams.Stream] = []
         self.device = device
         self.debug = debug
         self.thread = None
@@ -13,11 +15,12 @@ class MainRunner:
         if self.debug:
             print(message)
 
-    def add_action(self, action: protocols.Protocol, index: int | None = None) -> None:
+    def add_action(self, action: protocols.Protocol, index: int | None = None) -> protocols.Protocol:
         if index is None:
             self.action_list.append(action)
         else:
             self.action_list.insert(index, action)
+        return action
 
     def remove_action(self, action_type: protocols.Protocol) -> protocols.Protocol:
         for idx, action in enumerate(self.action_list):
@@ -44,6 +47,10 @@ class MainRunner:
 
     def finished_actions(self) -> bool:
         return len(self.action_list) == 0
+    
+    def add_stream(self, stream: streams.Stream):
+        self.stream_list.append(stream)
+        return stream
 
     def start_spinning(self) -> threading.Thread:
         """Starts up a thread running the main action execution loop."""
@@ -58,6 +65,13 @@ class MainRunner:
     def stop_spinning(self):
         self.kill_thread = True
 
+    def manage_streams(self, connection):
+        for s in self.stream_list:
+            if s.prev_time is None:
+                s.interval_request(connection)
+            if s.is_ready():
+                s.update()
+
     def _main_loop(self):
         connection = protocols.get_connection(self.device)  # Get connection
         protocols.wait_for_heartbeat(connection)  # Wait for heartbeat
@@ -65,6 +79,7 @@ class MainRunner:
         first = True
         while not self.kill_thread:
             protocols.check_and_send_heartbeat(connection)
+            self.manage_streams(connection)
 
             if not self.finished_actions():
                 action_to_run = self.get_next_action()
