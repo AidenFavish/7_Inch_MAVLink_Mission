@@ -39,7 +39,7 @@ class PolygonGeofenceProtocol(Protocol):
         self.log("Sending fence points...")
         seq = 0
         for vertex in self.geofence:
-            message = connection.recv_match(type=dialect.MAVLink_mission_request_int_message.msgname, blocking=True)  # Get mission item request
+            message = connection.recv_match(type=dialect.MAVLink_mission_request_message.msgname, blocking=True)  # Get mission item request
             self.log(f"Recieved mission item request: {message}")
             message = dialect.MAVLink_mission_item_int_message(target_system=connection.target_system,
                                                         target_component=connection.target_component,

@@ -21,7 +21,7 @@ class WaypointMissionProtocol(Protocol):
                                                         mission_type=dialect.MAV_MISSION_TYPE_MISSION)
         connection.mav.send(message)
         # Verify
-        message = connection.recv_match(blocking=True)
+        message = connection.recv_match(type=dialect.MAVLink_mission_ack_message.msgname, blocking=True)
         self.log(f"Cleared waypoints: {message}")
 
         ### Send the new fence
@@ -35,7 +35,7 @@ class WaypointMissionProtocol(Protocol):
         self.log("Sending waypoints...")
         seq = 0
         for waypoint in self.waypoints:
-            message = connection.recv_match(blocking=True)  # Get mission item request
+            message = connection.recv_match(type=dialect.MAVLink_mission_request_message.msgname, blocking=True)  # Get mission item request
             self.log(f"Recieved mission item request: {message}")
             message = dialect.MAVLink_mission_item_int_message(target_system=connection.target_system,
                                                         target_component=connection.target_component,

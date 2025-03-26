@@ -12,8 +12,13 @@ waypoints = [
 
 runner = MainRunner("udp:127.0.0.1:14550")
 
+# Keep track of streams
+global_pos = None
+local_pos = None
+battery = None
+
 # Build the mission
-runner.add_action(PolygonGeofenceProtocol(waypoints))
+runner.add_action(PolygonGeofenceProtocol(waypoints, debug=True))
 runner.add_action(WaypointMissionProtocol(waypoints, debug=True))
 runner.add_action(WaitProtocol(10.0, debug=True))
 runner.add_action(ChangeModeProtocol(ModeType.GUIDED, debug=True))
